@@ -6,9 +6,14 @@
 @forward "content";
 @forward "landing-page";
 @forward "testimonies";
+@forward "./components/card";
 
 .serinity-blur {
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(1.25rem);
+  @media screen and (max-width: 768px) {
+    backdrop-filter: blur(0.625rem);
+    
+  }
 }
 
 .serinity-section {
@@ -34,37 +39,5 @@
     font-family: "eskorte-latin";
     font-weight: 700;
     font-style: italic;
-  }
-}
-
-.serinity-wave-background {
-  width: 100%;
-  position: relative;
-  aspect-ratio: 1816 / 374;
-  overflow: hidden;
-
-  & > * {
-    position: relative;
-    z-index: 1;
-  }
-
-  @media (max-width: 1400px) {
-    min-height: 30dvh;
-    aspect-ratio: unset;
-    svg {
-      min-width: unset;
-      max-width: unset;
-    }
-  }
-
-  svg {
-    position: absolute;
-    z-index: 0;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%); // Center the SVG horizontally
-    height: 100%; // Make the SVG height match the container
-    width: auto; // Allow the width to adjust based on the height
-    min-width: 100%; // Ensure it's at least as wide as the container
   }
 }

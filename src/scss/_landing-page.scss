@@ -1,13 +1,198 @@
 #hero {
-  min-height: calc(100dvh - 84px);
+  min-height: 55dvh;
+  padding: 4rem 2rem;
+  gap: 2rem;
+  justify-content: center;
+  align-items: stretch;
+  .serinity-hero-img {
+    align-self: center;
+    img {
+      position: relative;
+      height: 500px;
+      aspect-ratio: 2/3;
+      flex: 1;
+    }
+  }
+  .serinity-hero-text {
+    max-width: 50rem;
+    flex: 1;
+    border-radius: 1.25rem;
+    padding: 1rem 1.25rem;
+  }
+  @media screen and (max-width: 768px) {
+    min-height: unset;
+    padding: 2rem 0;
+    justify-content: start;
+    .serinity-hero-img img {
+      display: none;
+    }
+    .serinity-hero-text {
+      padding: 1.2rem 1.25rem;
+      border-radius: 0;
+      width: 100vw;
+      flex: unset;
+    }
+  }
 }
 
+$card-count: 4;
+$animation-duration: 20s;
+$blur-max: 2rem;
+$opacity-min: 0.1;
+
 #questions {
+  padding-top: 5rem;
   .serinity-questions {
-    max-width: 1480px;
+    max-width: 90rem; // 1440px
+    margin: 0 auto;
+    position: relative;
     .serinity-question {
-      max-width: 280px;
+      padding: 4rem 2rem;
+      display: flex;
+      align-items: center;
+      width: 17.5rem; // 280px
+      animation-duration: $animation-duration;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+      transition: transform ease-in-out 0.3s;
+      &:hover,
+      &:active,
+      &:focus {
+        transform: translateY(-5px);
+        animation-play-state: paused;
+        filter: blur(0) !important;
+        opacity: 1 !important;
+      }
+      @for $i from 1 through $card-count {
+        &:nth-child(#{$i}) {
+          animation-name: breathe#{$i};
+        }
+      }
     }
+  }
+  @media screen and (max-width: 768px) {
+    padding-top: 2rem;
+    justify-content: flex-end;
+    .serinity-questions {
+      width: 100%;
+      flex: 1;
+
+      .serinity-question {
+        position: absolute;
+        top: 0;
+        height: 110%;
+        width: 90%;
+        p {
+          font-size: var(--wp--preset--font-size--serinity-md);
+        }
+      }
+    }
+  }
+}
+
+.serinity-wave-background {
+  background: url("../images/wave.svg") no-repeat center center;
+  background-size: cover;
+  min-height: calc(100vw * (374 / 1816));
+  max-width: 100vw;
+  @media screen and (max-width: 768px) {
+    min-height: 20rem;
+  }
+}
+
+@keyframes breathe1 {
+  0%,
+  10% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  25% {
+    opacity: 0.7;
+    filter: blur(calc($blur-max / 2));
+  }
+  50% {
+    opacity: $opacity-min;
+    filter: blur($blur-max);
+  }
+  75% {
+    opacity: 0.7;
+    filter: blur(calc($blur-max / 2));
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+@keyframes breathe2 {
+  0% {
+    opacity: $opacity-min;
+    filter: blur($blur-max);
+  }
+  25%,
+  35% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  50% {
+    opacity: 0.7;
+    filter: blur(calc($blur-max / 2));
+  }
+  75% {
+    opacity: $opacity-min;
+    filter: blur($blur-max);
+  }
+  100% {
+    opacity: $opacity-min;
+    filter: blur($blur-max);
+  }
+}
+
+@keyframes breathe3 {
+  0% {
+    opacity: 0.7;
+    filter: blur(calc($blur-max / 2));
+  }
+  25% {
+    opacity: $opacity-min;
+    filter: blur($blur-max);
+  }
+  50%,
+  60% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  75% {
+    opacity: 0.7;
+    filter: blur(calc($blur-max / 2));
+  }
+  100% {
+    opacity: 0.7;
+    filter: blur(calc($blur-max / 2));
+  }
+}
+
+@keyframes breathe4 {
+  0% {
+    opacity: $opacity-min;
+    filter: blur($blur-max);
+  }
+  25% {
+    opacity: 0.7;
+    filter: blur(calc($blur-max / 2));
+  }
+  50% {
+    opacity: $opacity-min;
+    filter: blur($blur-max);
+  }
+  75%,
+  85% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% {
+    opacity: $opacity-min;
+    filter: blur($blur-max);
   }
 }
 
@@ -75,8 +260,8 @@
     mix-blend-mode: darken;
   }
 }
-#services {
-}
+// #services {
+// }
 #why-now {
   & > * {
     position: relative;

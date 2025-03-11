@@ -1,0 +1,16 @@
+.serinity-card {
+  border-radius: 1rem;
+  overflow: hidden;
+  button:hover svg > rect {
+    fill: var(--wp--preset--color--rose-claire);
+  }
+
+  @media screen and (max-width: 768px) {
+    border-radius: 0;
+    width: 100vw;
+    .serinity-card-img, img, figure {
+      display: none;
+    }
+  }
+
+}
