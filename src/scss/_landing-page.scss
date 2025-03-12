@@ -1,9 +1,11 @@
 #hero {
+  $hero-text-img-height: clamp(14.25rem, 8.8036rem + 27.2321vw, 21.875rem);
   min-height: 55dvh;
   padding: 4rem 2rem;
   gap: 2rem;
   justify-content: center;
-  align-items: stretch;
+  align-items: center;
+  max-width: 100vw;
   .serinity-hero-img {
     align-self: center;
     img {
@@ -17,20 +19,38 @@
     max-width: 50rem;
     flex: 1;
     border-radius: 1.25rem;
-    padding: 1rem 1.25rem;
+    padding: 2rem 2.25rem;
+    div.is-layout-flex {
+      gap: 0.5rem;
+    }
+    .serinity-hero-text-img {
+      display:none;
+    }
   }
   @media screen and (max-width: 768px) {
+    align-items: stretch;
     min-height: unset;
     padding: 2rem 0;
     justify-content: start;
+    gap:0;
     .serinity-hero-img img {
       display: none;
     }
     .serinity-hero-text {
-      padding: 1.2rem 1.25rem;
+      position: relative;
+      padding: calc($hero-text-img-height + 1rem) 1.25rem 1.2rem 1.25rem;
       border-radius: 0;
       width: 100vw;
       flex: unset;
+      .serinity-hero-text-img {
+        max-width: 100vw;
+        display: block;
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height: $hero-text-img-height;
+      }
     }
   }
 }
@@ -47,7 +67,7 @@ $opacity-min: 0.1;
     margin: 0 auto;
     position: relative;
     .serinity-question {
-      padding: 4rem 2rem;
+      padding: 2rem 2.15rem;
       display: flex;
       align-items: center;
       width: 17.5rem; // 280px
@@ -197,9 +217,19 @@ $opacity-min: 0.1;
 }
 
 #coach {
+  .serinity-coach-img-mobile {
+    display: none;
+  }
+  div:has(>h2) {
+    gap:.25rem;
+  }
   & > * {
+    max-width: 100vw;
     position: relative;
     z-index: 2;
+  }
+  hr {
+    margin: 1rem 0;
   }
   &::after {
     content: "";
@@ -217,6 +247,46 @@ $opacity-min: 0.1;
     mix-blend-mode: lighten;
     isolation: isolate;
   }
+  @media screen and (max-width: 768px) {
+    .serinity-coach-img-mobile {
+      display: block;
+    }
+    .serinity-coach-img-desktop {
+      display: none;
+    }
+    > div {
+      width: 100%;
+      border-radius: 0!important;
+      flex-direction: column;
+      padding: 2rem 1rem!important;
+    }
+    .serinity-coach-card {
+      div:has(>h2) {
+        row-gap: .8rem;
+      }
+      div:has(>p) {
+        row-gap: .5rem;
+      }
+      h2 {
+        line-height: 1.05;
+      }
+    }
+  }
+  @media screen and (max-width: 500px) {
+    > div {
+      backdrop-filter: blur(1rem);
+    }
+    .serinity-coach-card {
+      backdrop-filter: unset!important;
+      background-color: unset!important;
+      box-shadow: unset!important;
+      padding:0!important;
+    }
+    .serinity-coach-img-mobile img {
+      width: 10rem;
+    }
+  }
+
 }
 
 #testimonies {
@@ -240,6 +310,7 @@ $opacity-min: 0.1;
   }
 }
 #methode {
+  // .serinity-cards-container {}
   & > * {
     position: relative;
     z-index: 2;
@@ -260,8 +331,18 @@ $opacity-min: 0.1;
     mix-blend-mode: darken;
   }
 }
-// #services {
-// }
+
+#plans {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 1s ease-out;
+  
+  &.open {
+    max-height: 100rem;
+  }
+}
+
+
 #why-now {
   & > * {
     position: relative;

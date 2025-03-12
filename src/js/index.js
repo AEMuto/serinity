@@ -8,6 +8,13 @@ console.log("Serinity Theme loaded");
 
 // Add your JS functionality
 document.addEventListener("DOMContentLoaded", function () {
+  const expandPlansBtn = document.querySelector("#expand-plans");
+  const plans = document.querySelector("#plans");
+
+  expandPlansBtn.addEventListener("click", (e) => {
+    plans.classList.toggle("open");
+  });
+
   const methods_cards = initCardSliders();
   // Initialize testimonial carousels with options
   const testimonialsCarousels = initCarousels(".serinity-testimonies", ".serinity-testimony", {
