@@ -5,20 +5,22 @@ Since we cannot easily target <header> elements in the block editor, we will use
 In the case we create another header part, we should duplicate the original and change the container class to something like: .serinity-header-container-alt-1.
 */
 
+@use "variables" as var;
+
 // Header container and wrapper styles
 .serinity-header-container {
   position: fixed;
   width: 100%;
-  top: 1rem;
+  top: calc(var.$navbar-offset + var(--wp-admin--admin-bar--height));
   z-index: 1000;
   max-width: 100vw;
 
   // Media query for smaller screens
   @media (max-width: 1280px) {
-    top: 0;
+    top: var(--wp-admin--admin-bar--height);
   }
   .serinity-header-wrapper {
-    height: 5.25rem; // 84px
+    height: var.$navbar-height;
     backdrop-filter: blur(1.25rem); // 20px
     background-color: rgba(250, 248, 246, 0.5);
     max-width: 1280px;
@@ -33,6 +35,10 @@ In the case we create another header part, we should duplicate the original and 
       border-radius: unset;
       border: unset;
       border-bottom: solid 1px var(--wp--preset--color--nacre-claire);
+    }
+
+    @media screen and (max-width: 500px) {
+      padding: 0.8rem var.$horizontal-padding-small;
     }
 
     // Home link styling

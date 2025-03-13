@@ -1,3 +1,4 @@
+@use "variables" as var;
 #hero {
   $hero-text-img-height: clamp(14.25rem, 8.8036rem + 27.2321vw, 21.875rem);
   min-height: 55dvh;
@@ -9,8 +10,8 @@
   .serinity-hero-img {
     align-self: center;
     img {
-      position: relative;
       height: 500px;
+      width: auto;
       aspect-ratio: 2/3;
       flex: 1;
     }
@@ -24,15 +25,15 @@
       gap: 0.5rem;
     }
     .serinity-hero-text-img {
-      display:none;
+      display: none;
     }
   }
   @media screen and (max-width: 768px) {
     align-items: stretch;
     min-height: unset;
-    padding: 2rem 0;
+    padding: 0 0 2rem 0;
     justify-content: start;
-    gap:0;
+    gap: 0;
     .serinity-hero-img img {
       display: none;
     }
@@ -45,12 +46,18 @@
       .serinity-hero-text-img {
         max-width: 100vw;
         display: block;
-        position:absolute;
-        top:0;
-        left:0;
-        width:100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
         height: $hero-text-img-height;
       }
+    }
+  }
+  @media screen and (max-width: 500px) {
+    .serinity-hero-text {
+      padding: calc($hero-text-img-height + 1rem) var.$horizontal-padding-small 1.2rem
+        var.$horizontal-padding-small;
     }
   }
 }
@@ -217,11 +224,37 @@ $opacity-min: 0.1;
 }
 
 #coach {
+  .serinity-coach-card > p {
+    text-align: justify;
+    hyphens: auto;
+    text-justify: inter-word;
+  }
+  > div {
+    max-width: 80rem; // 1280px
+    margin: 0 2rem;
+    > .serinity-coach-img-desktop {
+      flex: 1;
+      display: flex;
+      img {
+        flex: 1;
+        width: 300px;
+        height: auto;
+        aspect-ratio: 2/3;
+      }
+    }
+    > div {
+      flex: 2;
+      > div {
+        // max-width: 20rem;
+      }
+    }
+  }
   .serinity-coach-img-mobile {
     display: none;
   }
-  div:has(>h2) {
-    gap:.25rem;
+
+  div:has(> h2) {
+    gap: 0.25rem;
   }
   & > * {
     max-width: 100vw;
@@ -247,25 +280,27 @@ $opacity-min: 0.1;
     mix-blend-mode: lighten;
     isolation: isolate;
   }
+
   @media screen and (max-width: 768px) {
     .serinity-coach-img-mobile {
       display: block;
     }
-    .serinity-coach-img-desktop {
+    > div .serinity-coach-img-desktop {
       display: none;
     }
     > div {
       width: 100%;
-      border-radius: 0!important;
+      border-radius: 0 !important;
       flex-direction: column;
-      padding: 2rem 1rem!important;
+      padding: 2rem 1rem !important;
+      margin: 0;
     }
     .serinity-coach-card {
-      div:has(>h2) {
-        row-gap: .8rem;
+      div:has(> h2) {
+        row-gap: 0.8rem;
       }
-      div:has(>p) {
-        row-gap: .5rem;
+      div:has(> p) {
+        row-gap: 0.5rem;
       }
       h2 {
         line-height: 1.05;
@@ -275,18 +310,18 @@ $opacity-min: 0.1;
   @media screen and (max-width: 500px) {
     > div {
       backdrop-filter: blur(1rem);
+      padding: 2rem var.$horizontal-padding-small !important;
     }
     .serinity-coach-card {
-      backdrop-filter: unset!important;
-      background-color: unset!important;
-      box-shadow: unset!important;
-      padding:0!important;
+      backdrop-filter: unset !important;
+      background-color: unset !important;
+      box-shadow: unset !important;
+      padding: 0 !important;
     }
     .serinity-coach-img-mobile img {
       width: 10rem;
     }
   }
-
 }
 
 #testimonies {
@@ -330,18 +365,27 @@ $opacity-min: 0.1;
     );
     mix-blend-mode: darken;
   }
+  @media screen and (max-width: 768px) {
+    .serinity-card {
+      min-height: 24.375rem;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    .serinity-card {
+      min-height: 30.625rem;
+    }
+  }
 }
 
 #plans {
   overflow: hidden;
   max-height: 0;
   transition: max-height 1s ease-out;
-  
+
   &.open {
     max-height: 100rem;
   }
 }
-
 
 #why-now {
   & > * {

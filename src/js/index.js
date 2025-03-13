@@ -8,6 +8,8 @@ console.log("Serinity Theme loaded");
 
 // Add your JS functionality
 document.addEventListener("DOMContentLoaded", function () {
+  const hasAdminBar = !!document.querySelector("#wpadminbar");
+  if (!hasAdminBar) document.documentElement.style.setProperty('--wp-admin--admin-bar--height', '0px');
   const expandPlansBtn = document.querySelector("#expand-plans");
   const plans = document.querySelector("#plans");
 

@@ -20,7 +20,7 @@
     min-width: 15.625rem; // 250px
     max-width: 20rem; // 320px
     will-change: opacity, transform; // Optimize for animation performance
-    
+    box-shadow: var(--wp--preset--shadow--natural);
     // Add hover effect for testimonies
     &:hover {
       transform: translateY(-5px);
