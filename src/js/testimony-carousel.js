@@ -11,8 +11,11 @@ class SerinityCarouselCard {
    */
   constructor(element, options = {}) {
     this.element = element;
-    this.options = options;
-
+    this.options = {
+      characterLimit: 250,
+      ...options,
+    };
+    this.currentContent = this.element.querySelector("p").textContent.length;
     // Initialize states
     this.opacity = options.randomOpacity ? Math.random() * 0.5 + 0.5 : 1;
     this.blur = 0;
@@ -21,6 +24,8 @@ class SerinityCarouselCard {
 
     // Apply initial styles
     this.updateAppearance();
+    // Add read more button
+    this.addReadMoreButton();
   }
 
   /**
@@ -35,33 +40,33 @@ class SerinityCarouselCard {
     const containerRect = this.element.parentElement.parentElement.getBoundingClientRect();
     const cardLeft = rect.left - containerRect.left;
     const cardRight = rect.right - containerRect.left;
-    
+
     // Determine fade zone boundaries
     const leftFadeOutEnd = containerLeft + fadeZoneWidth;
     const rightFadeInStart = containerRight - fadeZoneWidth;
-    
+
     // Default opacity - fully visible
     let opacity = 1;
-    
+
     // FADE IN from right - gradually increase opacity as card enters
     if (cardLeft > rightFadeInStart) {
       // Calculate how far the card has entered (0 = just at edge, 1 = fully entered fade zone)
       const progress = (containerRight - cardLeft) / fadeZoneWidth;
       opacity = Math.min(1, Math.max(0, progress));
     }
-    
+
     // FADE OUT to left - gradually decrease opacity as card exits
     else if (cardRight < leftFadeOutEnd) {
       // Calculate how far the card is still visible (0 = at edge, 1 = fully in fade zone)
       const progress = (cardRight - containerLeft) / fadeZoneWidth;
       opacity = Math.min(1, Math.max(0, progress));
     }
-    
+
     // Card completely outside viewport
     if (cardRight <= containerLeft || cardLeft >= containerRight) {
       opacity = 0;
     }
-    
+
     this.positionOpacity = opacity;
     this.updateAppearance();
   }
@@ -90,10 +95,10 @@ class SerinityCarouselCard {
   updateAppearance() {
     // Calculate final opacity - respect all factors
     const finalOpacity = (this.positionOpacity ?? 1) * (this.timeOpacity ?? 1) * this.opacity;
-    
+
     // Apply opacity directly without any minimum floor
     this.element.style.opacity = finalOpacity.toString();
-    
+
     // Apply blur effect only if card is at least somewhat visible
     if (this.blur > 0 && finalOpacity > 0.05) {
       this.element.style.filter = `blur(${this.blur}px)`;
@@ -116,6 +121,22 @@ class SerinityCarouselCard {
       this.updateAppearance();
       this.element.style.transform = "";
       this.element.style.zIndex = "";
+    }
+  }
+
+  addReadMoreButton() {
+    const contentCharLength = parseInt(this.currentContent,10);
+    if (
+      !this.element.querySelector(".serinity-read-more") &&
+      contentCharLength > this.options.characterLimit
+    ) {
+      const readMoreButton = document.createElement("button");
+      readMoreButton.classList.add("serinity-read-more");
+      this.element.appendChild(readMoreButton);
+      readMoreButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.element.classList.toggle("expanded");
+      });
     }
   }
 }
@@ -141,6 +162,8 @@ export class SerinityCarousel {
       viewportOffset: 0, // Offset from left edge for custom viewport
       viewportWidth: null, // Custom viewport width (null = use container width)
       static: false, // If true, disable translation movement
+      debug: false, // Show debug zones
+      cardCharacterLimit: 250,
       ...options,
     };
 
@@ -170,30 +193,22 @@ export class SerinityCarousel {
 
     // Start the animation
     this.startAnimation();
+
+    // Show debug zones if enabled
+    if (this.options.debug) this.showDebugZones();
   }
 
   /**
    * Set up the container with necessary CSS properties
    */
   setupContainer() {
-    // Set container style
-    this.container.style.width = "100vw";
-    this.container.style.maxWidth = "100%";
-    this.container.style.overflowX = "hidden";
-    this.container.style.overflowY = "hidden";
-    this.container.style.position = "relative";
-    this.container.style.margin = "0 calc(-50vw + 50%)";
-    this.container.style.left = "0";
-
     // Create inner wrapper for scrolling
     this.scrollWrapper = document.createElement("div");
     this.scrollWrapper.className = "serinity-carousel-wrapper";
-    this.scrollWrapper.style.display = "flex";
-    this.scrollWrapper.style.position = "relative";
 
     // Get all carousel cards
     const carouselCards = Array.from(this.container.querySelectorAll(this.cardSelector));
-    
+
     // Store container dimensions
     this.containerWidth = this.container.offsetWidth;
     this.fadeZoneWidth = carouselCards[0].offsetWidth;
@@ -202,12 +217,7 @@ export class SerinityCarousel {
     this.originalCarouselCards = carouselCards;
 
     // Move all cards to the wrapper
-    carouselCards.forEach((card) => {
-      card.style.flexShrink = "0";
-      card.style.margin = "0 15px";
-      card.style.transition = "transform 0.3s ease, box-shadow 0.3s ease";
-      this.scrollWrapper.appendChild(card);
-    });
+    carouselCards.forEach((card) => this.scrollWrapper.appendChild(card));
 
     // Add the wrapper back to the container
     this.container.appendChild(this.scrollWrapper);
@@ -255,6 +265,7 @@ export class SerinityCarousel {
     this.cards = this.allCarouselCards.map((carouselCard) => {
       const card = new SerinityCarouselCard(carouselCard, {
         randomOpacity: this.options.randomOpacity,
+        characterLimit: this.options.cardCharacterLimit,
       });
 
       // Add hover listeners
