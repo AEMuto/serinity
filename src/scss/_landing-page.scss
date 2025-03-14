@@ -325,9 +325,10 @@ $opacity-min: 0.1;
 }
 
 #testimonies {
-  & > * {
+  .serinity-testimonies{
     position: relative;
-    z-index: 2;
+    overflow-x: clip;
+    z-index: 10;
   }
   &::after {
     content: "";
@@ -344,6 +345,7 @@ $opacity-min: 0.1;
     );
   }
 }
+
 #methode {
   // .serinity-cards-container {}
   & > * {

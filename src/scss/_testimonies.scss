@@ -1,46 +1,98 @@
+$max-height: 20rem;
+
 // Testimony carousel styles
 .serinity-testimonies {
-  width: 100vw;
-  max-width: 100%;
+  align-items: flex-start;
+  max-width: 100vw;
+  width: 100%;
   margin: 2rem calc(-50vw + 50%);
-  position: relative;
-  overflow: hidden;
+  // position: relative;
+  // overflow: hidden;
   padding: 2rem 0;
-  
+  max-height: $max-height;
+
   // Wrapper for all testimonies
   .serinity-carousel-wrapper {
     display: flex;
-    position: relative;
     align-items: start;
   }
-  
+
   // Individual testimony cards
   .serinity-testimony {
-    flex:none;
-    min-width: 15.625rem; // 250px
-    max-width: 20rem; // 320px
+    position: relative;
+    flex: 0 0 100%;
+    margin: 0 1rem;
+    max-height: $max-height;
+    max-width: calc(100vw-2rem);
+    $p: 1.8rem;
+    padding: $p calc($p * 1.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     will-change: opacity, transform; // Optimize for animation performance
     box-shadow: var(--wp--preset--shadow--natural);
     // Add hover effect for testimonies
     &:hover {
       transform: translateY(-5px);
-      box-shadow: 0 .5rem 1rem rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
       opacity: 1 !important; // Force full opacity on hover
       z-index: 2; // Bring the hovered testimony to the front
     }
-    
-    // Style for testimony heading
-    h5 {
-      margin-top: 0;
-      margin-bottom: 0.75rem;
-      font-weight: 600;
+    // Expanded state
+    &.expanded {
+      max-height: 90rem;
+
+      p {
+        display: block;
+        -webkit-line-clamp: initial;
+        line-clamp: initial;
+        overflow: visible;
+      }
+
+      .serinity-read-more {
+        &::before {
+          content: "- Moins";
+        }
+      }
     }
-    
-    // Style for testimony text
-    p {
-      font-style: italic;
-      margin-bottom: 0;
-      line-height: 1.5;
+  }
+
+  // Style for testimony heading
+  h5 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+
+  // Style for testimony text
+  p {
+    line-height: 1.4;
+    letter-spacing: 1%;
+    font-style: italic;
+    margin-bottom: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .serinity-read-more {
+    height: 2.75rem;
+    display: inline-block;
+    margin-top: 1rem;
+    margin-left: -1rem;
+    border: none;
+    background: none;
+    color: var(--wp--preset--color--rose-sombre);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0 1rem;
+    font-weight: 655;
+
+    &::before {
+      content: "+ Lire plus";
+    }
+
+    &:hover {
+      text-decoration: underline;
     }
   }
 }
