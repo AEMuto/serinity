@@ -15,14 +15,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
   expandPlansBtn.addEventListener("click", (e) => {
     plans.classList.toggle("open");
+    if (plans.classList.contains("open")) {
+      // scroll to anchor #aurea
+      const offset = plans.offsetTop - 100;
+      window.scrollTo({
+        top: offset,
+        behavior: "smooth"
+      });
+    }
   });
 
   const methods_cards = initCardSliders();
+
   // Initialize testimonial carousels with options
   const testimonialsCarousels = initCarousels(".serinity-testimonies", ".serinity-testimony", {
     direction: "left", // "left" or "right"
-    speed: 0.5, // Pixels per frame
+    speed: .8, // Pixels per frame
     randomOpacity: false, // Random initial opacity
     timeBasedAnimation: false, // Enable time-based opacity and blur
+    debug: false,
   });
 });
