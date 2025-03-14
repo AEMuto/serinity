@@ -23,7 +23,7 @@ $max-height: 20rem;
     flex: 0 0 100%;
     margin: 0 1rem;
     max-height: $max-height;
-    max-width: calc(100vw-2rem);
+    max-width: calc(100vw - 2rem);
     $p: 1.8rem;
     padding: $p calc($p * 1.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
