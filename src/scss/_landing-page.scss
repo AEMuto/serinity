@@ -92,7 +92,7 @@ $opacity-min: 0.1;
       }
       @for $i from 1 through $card-count {
         &:nth-child(#{$i}) {
-          animation-name: breathe#{$i};
+          // animation-name: breathe#{$i};
         }
       }
     }
@@ -224,10 +224,12 @@ $opacity-min: 0.1;
 }
 
 #coach {
-  .serinity-coach-card > p {
-    text-align: justify;
-    hyphens: auto;
-    text-justify: inter-word;
+  .serinity-coach-card {
+    > p {
+      text-align: justify;
+      hyphens: auto;
+      text-justify: inter-word;
+    }
   }
   > div {
     max-width: 80rem; // 1280px
@@ -244,9 +246,6 @@ $opacity-min: 0.1;
     }
     > div {
       flex: 2;
-      > div {
-        // max-width: 20rem;
-      }
     }
   }
   .serinity-coach-img-mobile {
@@ -282,6 +281,17 @@ $opacity-min: 0.1;
   }
 
   @media screen and (max-width: 768px) {
+    .serinity-chip {
+      p:first-child {
+        padding: 0 !important;
+        padding-top: .2rem !important;
+        min-width: 4.375rem;
+        text-align: center;
+      }
+      p:last-child {
+        flex: 1;
+      }
+    }
     .serinity-coach-img-mobile {
       display: block;
     }
@@ -295,7 +305,16 @@ $opacity-min: 0.1;
       padding: 2rem 1rem !important;
       margin: 0;
     }
+    > div > div {
+      align-items: stretch;
+    }
     .serinity-coach-card {
+      + div {
+        flex-direction: column;
+        & *:not(p) {
+          width: 100%;
+        }
+      }
       div:has(> h2) {
         row-gap: 0.8rem;
       }
@@ -325,7 +344,7 @@ $opacity-min: 0.1;
 }
 
 #testimonies {
-  .serinity-testimonies{
+  .serinity-testimonies {
     position: relative;
     overflow-x: clip;
     z-index: 10;
