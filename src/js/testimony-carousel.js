@@ -140,6 +140,8 @@ export class SerinityCarousel {
     this.scrollSpeed = this.options.direction === "right" ? -this.options.speed : this.options.speed;
 
     this.isPaused = false;
+    this.isHovering = false; // Track if any card is being hovered
+    this.hoverTimeout = null; // Store the timeout reference
     this.animationId = null;
 
     // Initialize the carousel
@@ -230,16 +232,42 @@ export class SerinityCarousel {
 
       // Add hover listeners
       carouselCard.addEventListener("mouseenter", () => {
+        // Clear any pending resume timeout
+        if (this.hoverTimeout) {
+          clearTimeout(this.hoverTimeout);
+          this.hoverTimeout = null;
+        }
+        
+        this.isHovering = true;
         this.isPaused = true;
+        card.setHover(true);
       });
 
       carouselCard.addEventListener("mouseleave", () => {
-        wait(500).then(() => {
-          this.isPaused = false;
-        });
+        card.setHover(false);
+        
+        // Set a timeout before resuming animation
+        // This gives time for the mouse to move to another card
+        this.hoverTimeout = setTimeout(() => {
+          // Only resume if we're not hovering any card
+          if (!this.container.matches(':hover')) {
+            this.isHovering = false;
+            this.isPaused = false;
+          }
+          this.hoverTimeout = null;
+        }, 300);
       });
 
       return card;
+    });
+    
+    // Add a listener to the container to track when mouse leaves the entire carousel
+    this.container.addEventListener("mouseleave", () => {
+      // When mouse leaves the entire container, resume animation after a short delay
+      setTimeout(() => {
+        this.isHovering = false;
+        this.isPaused = false;
+      }, 300);
     });
   }
 
@@ -386,6 +414,10 @@ export class SerinityCarousel {
   destroy() {
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
+    }
+    
+    if (this.hoverTimeout) {
+      clearTimeout(this.hoverTimeout);
     }
   }
 }
