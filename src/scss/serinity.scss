@@ -8,6 +8,11 @@
 @forward "testimonies";
 @forward "./components/card";
 
+.serinity-hidden {
+  display: none;
+  pointer-events: none;
+}
+
 .serinity-main {
   min-height: calc(
     100vh - $navbar-height - $navbar-offset - $footer-height - var(--wp-admin--admin-bar--height)
