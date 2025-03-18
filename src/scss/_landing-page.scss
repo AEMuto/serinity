@@ -284,7 +284,7 @@ $opacity-min: 0.1;
     .serinity-chip {
       p:first-child {
         padding: 0 !important;
-        padding-top: .2rem !important;
+        padding-top: 0.2rem !important;
         min-width: 4.375rem;
         text-align: center;
       }
@@ -362,6 +362,9 @@ $opacity-min: 0.1;
       rgba(0, 0, 0, 0) 50%,
       var(--wp--preset--color--aubergine) 90%
     );
+  }
+  @media screen and (max-width: 768px) {
+    padding-top: 4rem !important;
   }
 }
 

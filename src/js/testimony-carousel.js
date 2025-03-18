@@ -1,4 +1,4 @@
-import { calculateElementsWidth, wait } from "./utils";
+import { calculateElementsWidth } from "./utils";
 
 /**
  * Card class to manage individual carousel cards
@@ -133,6 +133,8 @@ export class SerinityCarousel {
       speed: 0.5, // Pixels per frame
       debug: false, // Show debug zones
       cardCharacterLimit: 250,
+      mobileBreakpoint: 768, // Pixel width below which mobile mode is enabled
+      mobileTitle: "Testimonies", // Title for mobile view
       ...options,
     };
 
@@ -143,6 +145,10 @@ export class SerinityCarousel {
     this.isHovering = false; // Track if any card is being hovered
     this.hoverTimeout = null; // Store the timeout reference
     this.animationId = null;
+    this.currentCardIndex = 0; // Track the current visible card for mobile navigation
+    this.isMobileView = false; // Flag to track mobile view state
+    this.isResetting = false; // Flag to track when we're resetting the scroll position
+    this.isAnimating = false; // Flag to prevent multiple navigation actions during animation
 
     // Initialize the carousel
     this.init();
@@ -155,14 +161,43 @@ export class SerinityCarousel {
     // Set up the container styling
     this.setupContainer();
 
+    // Check if we're in mobile view
+    this.checkMobileView();
+
     // Set up event listeners
     this.setupEventListeners();
 
-    // Start the animation
-    this.startAnimation();
+    // Add navigation controls
+    this.addNavigationControls();
+
+    // Start the animation (for desktop only)
+    if (!this.isMobileView) {
+      this.startAnimation();
+    }
 
     // Show debug zones if enabled
     if (this.options.debug) this.showDebugZones();
+  }
+
+  /**
+   * Check if we're in mobile view based on window width
+   */
+  checkMobileView() {
+    this.isMobileView = window.innerWidth < this.options.mobileBreakpoint;
+    this.container.classList.toggle('serinity-mobile-view', this.isMobileView);
+    
+    if (this.isMobileView) {
+      // Stop animation if we're in mobile view
+      if (this.animationId) {
+        cancelAnimationFrame(this.animationId);
+        this.animationId = null;
+      }
+      // Make sure the first card is visible
+      this.scrollToCard(0, false);
+    } else if (!this.animationId) {
+      // Restart animation if we're in desktop view and not already running
+      this.startAnimation();
+    }
   }
 
   /**
@@ -230,7 +265,7 @@ export class SerinityCarousel {
         characterLimit: this.options.cardCharacterLimit,
       });
 
-      // Add hover listeners
+      // Add hover listeners (for desktop only)
       carouselCard.addEventListener("mouseenter", () => {
         // Clear any pending resume timeout
         if (this.hoverTimeout) {
@@ -272,6 +307,209 @@ export class SerinityCarousel {
   }
 
   /**
+   * Add navigation controls (prev/next buttons)
+   */
+  addNavigationControls() {
+    // Create navigation container
+    const navContainer = document.createElement('div');
+    navContainer.className = 'serinity-testimony-nav';
+
+    const text = this.options.mobileTitle;
+    const title = document.createElement('h2');
+    title.className = 'serinity-testimony-title';
+    title.textContent = text;
+    
+    // Create previous button
+    const prevButton = document.createElement('button');
+    prevButton.className = 'serinity-testimony-nav-prev';
+    prevButton.setAttribute('aria-label', 'Previous testimonial');
+    prevButton.innerHTML = `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+    
+    // Create next button
+    const nextButton = document.createElement('button');
+    nextButton.className = 'serinity-testimony-nav-next';
+    nextButton.setAttribute('aria-label', 'Next testimonial');
+    nextButton.innerHTML = `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+    
+    // Add event listeners
+    prevButton.addEventListener('click', () => this.navigateToPrevCard());
+    nextButton.addEventListener('click', () => this.navigateToNextCard());
+    
+    // Add buttons to container
+    navContainer.appendChild(prevButton);
+    navContainer.appendChild(title);
+    navContainer.appendChild(nextButton);
+    
+    // Add to main container
+    this.container.appendChild(navContainer);
+    
+    // Store references
+    this.prevButton = prevButton;
+    this.nextButton = nextButton;
+    this.navContainer = navContainer;
+  }
+
+  /**
+   * Navigate to previous card
+   */
+  navigateToPrevCard() {
+    if (this.isAnimating) return;
+    
+    const targetIndex = this.currentCardIndex === 0 
+      ? this.originalCarouselCards.length - 1 
+      : this.currentCardIndex - 1;
+    
+    // Check if we need special handling for wrapping around
+    if (this.currentCardIndex === 0 && this.isMobileView) {
+      // We're moving from first to last - need special handling
+      this.handleWrappingNavigation('prev');
+    } else {
+      // Normal case
+      this.scrollToCard(targetIndex);
+    }
+  }
+
+  /**
+   * Navigate to next card
+   */
+  navigateToNextCard() {
+    if (this.isAnimating) return;
+    
+    const targetIndex = (this.currentCardIndex + 1) % this.originalCarouselCards.length;
+    
+    // Check if we need special handling for wrapping around
+    if (this.currentCardIndex === this.originalCarouselCards.length - 1 && this.isMobileView) {
+      // We're moving from last to first - need special handling
+      this.handleWrappingNavigation('next');
+    } else {
+      // Normal case
+      this.scrollToCard(targetIndex);
+    }
+  }
+
+  /**
+   * Handle the special case of wrapping from first to last card or last to first
+   * @param {string} direction - Either 'prev' or 'next'
+   */
+  handleWrappingNavigation(direction) {
+    this.isAnimating = true;
+    
+    // Calculate which clone set to use and the target index
+    let targetSetIndex, targetCardIndex;
+    if (direction === 'prev') {
+      // Going from first to last - use the previous clone set
+      targetSetIndex = 0; // First clone set
+      targetCardIndex = this.originalCarouselCards.length - 1; // Last card
+    } else {
+      // Going from last to first - use the next clone set
+      targetSetIndex = 2; // Last clone set
+      targetCardIndex = 0; // First card
+    }
+    
+    // Calculate the actual card index including clones
+    const actualIndex = (targetSetIndex * this.originalCarouselCards.length) + targetCardIndex;
+    const targetCard = this.allCarouselCards[actualIndex];
+    
+    if (!targetCard) {
+      this.isAnimating = false;
+      return;
+    }
+    
+    // First animate to the clone
+    this.scrollToCardByElement(targetCard, true, () => {
+      // After animation completes, immediately jump to the real card
+      this.scrollWrapper.classList.remove('with-transition');
+      
+      // Get the index in the main set
+      const mainSetIndex = this.originalCarouselCards.length + targetCardIndex;
+      const mainCard = this.allCarouselCards[mainSetIndex];
+      
+      if (mainCard) {
+        // Jump to the real card without animation
+        this.scrollToCardByElement(mainCard, false);
+        
+        // Update current index
+        this.currentCardIndex = targetCardIndex;
+      }
+      
+      this.isAnimating = false;
+    });
+  }
+
+  /**
+   * Scroll to a specific card element
+   * @param {HTMLElement} cardElement - The card element to scroll to
+   * @param {boolean} animate - Whether to animate the scroll
+   * @param {Function} callback - Optional callback after animation completes
+   */
+  scrollToCardByElement(cardElement, animate = true, callback = null) {
+    // Calculate the scroll position for this element
+    const cardRect = cardElement.getBoundingClientRect();
+    const containerRect = this.container.getBoundingClientRect();
+    
+    // For mobile: center the card in the container
+    let targetPosition;
+    
+    if (this.isMobileView) {
+      // In mobile view, we want the card centered
+      targetPosition = cardElement.offsetLeft - (this.containerWidth - cardRect.width) / 2;
+    } else {
+      // In desktop, just position at the card's left edge
+      targetPosition = cardElement.offsetLeft;
+    }
+    
+    // Update the scroll position
+    if (animate) {
+      // Use smooth animation
+      this.scrollWrapper.classList.add('with-transition');
+      
+      if (callback) {
+        // If we have a callback, execute it after animation completes
+        setTimeout(() => {
+          callback();
+        }, 300);
+      } else {
+        // Otherwise just remove the transition class
+        setTimeout(() => {
+          this.scrollWrapper.classList.remove('with-transition');
+        }, 300);
+      }
+    } else {
+      // Instant position change
+      this.scrollWrapper.classList.remove('with-transition');
+    }
+    
+    this.scrollPosition = targetPosition;
+    this.scrollWrapper.style.transform = `translateX(-${this.scrollPosition}px)`;
+  }
+
+  /**
+   * Scroll to a specific card by index
+   * @param {number} index - Index of the card to scroll to
+   * @param {boolean} animate - Whether to animate the scroll
+   */
+  scrollToCard(index, animate = true) {
+    if (this.isAnimating) return;
+    
+    // Get the actual card including clones
+    const actualIndex = index + this.originalCarouselCards.length; // Skip the first set of clones
+    const targetCard = this.allCarouselCards[actualIndex];
+    
+    if (!targetCard) return;
+    
+    this.scrollToCardByElement(targetCard, animate);
+    this.currentCardIndex = index;
+  }
+
+  /**
    * Calculate dimensions needed for the animation
    */
   calculateDimensions() {
@@ -302,29 +540,87 @@ export class SerinityCarousel {
       this.isPaused = document.hidden;
     });
 
-    // Handle resize
+    // Handle resize - especially important for switching between mobile and desktop layouts
     window.addEventListener("resize", () => {
+      // Get new container dimensions
       this.containerWidth = this.container.offsetWidth;
       this.fadeZoneWidth = this.originalCarouselCards[0].offsetWidth;
       this.containerCenter = this.containerWidth / 2;
+      
+      // Check if we need to switch between mobile and desktop views
+      const wasMobile = this.isMobileView;
+      this.checkMobileView();
+      
+      // Recalculate dimensions
       this.calculateDimensions();
+      
+      // If still in mobile view, make sure the current card stays visible
+      if (this.isMobileView) {
+        this.scrollToCard(this.currentCardIndex, false);
+      }
+      
       this.updateCardAppearance();
     });
+
+    // Add touch swipe support for mobile
+    this.setupTouchEvents();
+  }
+
+  /**
+   * Setup touch events for mobile swipe navigation
+   */
+  setupTouchEvents() {
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const minSwipeDistance = 50; // Minimum distance to be considered a swipe
+    
+    this.container.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    this.container.addEventListener('touchend', (e) => {
+      if (!this.isMobileView || this.isAnimating) return; // Only handle swipes in mobile view when not animating
+      
+      touchEndX = e.changedTouches[0].screenX;
+      const distance = touchStartX - touchEndX;
+      
+      if (Math.abs(distance) > minSwipeDistance) {
+        if (distance > 0) {
+          // Swipe left - show next card
+          this.navigateToNextCard();
+        } else {
+          // Swipe right - show previous card
+          this.navigateToPrevCard();
+        }
+      }
+    }, { passive: true });
   }
 
   /**
    * Update appearance of all cards
    */
   updateCardAppearance() {
+    // In mobile view, cards are always fully visible
+    if (this.isMobileView) {
+      this.cards.forEach(card => {
+        card.element.style.opacity = "1";
+      });
+      return;
+    }
+    
+    // In desktop view, use position-based opacity
     this.cards.forEach((card) => {
       card.updatePositionOpacity(this.viewportLeft, this.viewportRight, this.fadeZoneWidth);
     });
   }
 
   /**
-   * Start the animation loop
+   * Start the animation loop (desktop only)
    */
   startAnimation() {
+    // Don't animate in mobile view
+    if (this.isMobileView) return;
+    
     const animate = () => {
       if (!this.isPaused) {
         // Increment scroll position
@@ -333,10 +629,16 @@ export class SerinityCarousel {
         // Check for reset
         if (this.scrollSpeed > 0 && this.scrollPosition >= this.singleSetWidth * 2) {
           // Reset when scrolling left
+          this.isResetting = true;
+          this.scrollWrapper.classList.remove('with-transition'); // Remove transition during reset
           this.scrollPosition = this.singleSetWidth;
         } else if (this.scrollSpeed < 0 && this.scrollPosition <= 0) {
           // Reset when scrolling right
+          this.isResetting = true;
+          this.scrollWrapper.classList.remove('with-transition'); // Remove transition during reset
           this.scrollPosition = this.singleSetWidth;
+        } else {
+          this.isResetting = false;
         }
 
         // Apply the transform
@@ -418,6 +720,11 @@ export class SerinityCarousel {
     
     if (this.hoverTimeout) {
       clearTimeout(this.hoverTimeout);
+    }
+    
+    // Remove navigation controls
+    if (this.navContainer) {
+      this.container.removeChild(this.navContainer);
     }
   }
 }

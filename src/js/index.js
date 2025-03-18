@@ -30,9 +30,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize testimonial carousels with options
   const testimonialsCarousels = initCarousels(".serinity-testimonies", ".serinity-testimony", {
     direction: "left", // "left" or "right"
-    speed: .8, // Pixels per frame
-    randomOpacity: false, // Random initial opacity
-    timeBasedAnimation: false, // Enable time-based opacity and blur
+    speed: .5, // Pixels per frame
+    mobileTitle: "Témoignages", // Title for mobile carousel
     debug: false,
   });
 });
