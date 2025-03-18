@@ -1,4 +1,11 @@
 $navbar-height: clamp(3.6rem, 3.05rem + 2.75vw, 5.25rem); // 57.6px (320px) -> 84px (1280px)
 $navbar-offset: 1rem; // 16px
 $footer-height: 4rem; // 64px
-$horizontal-padding-small: clamp(0.75rem, -0.5833rem + 6.6667vw, 1.5rem);
+$horizontal-padding-small: clamp(0.75rem, -0.5833rem + 6.6667vw, 1.5rem); // 12px (320px) -> 24px (1280px)
+
+$max-content-width: 1280px;
+$min-content-width: 320px;
+$breakpoint-sm: 480px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;

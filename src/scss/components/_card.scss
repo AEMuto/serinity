@@ -1,4 +1,5 @@
 @use "../variables" as var;
+
 .serinity-card {
   display: flex;
   align-items: stretch;
@@ -30,7 +31,7 @@
   > div:nth-child(2) {
     flex: 4;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: var.$breakpoint-md) {
     border-radius: 0;
     width: 100vw;
     min-height: 30rem;
@@ -38,7 +39,7 @@
       display: none;
     }
   }
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: var.$breakpoint-sm) {
     .serinity-card-text {
       padding: 1.5rem var.$horizontal-padding-small !important;
     }

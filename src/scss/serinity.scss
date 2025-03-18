@@ -13,33 +13,34 @@
   pointer-events: none;
 }
 
+.serinity-screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal;
+}
+
 .serinity-main {
   min-height: calc(
     100vh - $navbar-height - $navbar-offset - $footer-height - var(--wp-admin--admin-bar--height)
   );
   margin-top: calc($navbar-height + $navbar-offset);
   padding: 1.4rem 0;
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: $max-content-width) {
     min-height: calc(100vh - $navbar-height - $footer-height - var(--wp-admin--admin-bar--height));
     margin-top: $navbar-height;
     &.serinity-page-home {
       padding-top: 0;
     }
   }
-  h2.serinity-page-heading {
-    position: relative;
-    &::after {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      top: 50%;
-      left: 50%;
-      transform: translateX(-50%) translateY(-50%);
-      width: 105%;
-      height: 66%;
-      background-color: var(--wp--preset--color--aubergine-claire);
-      border-radius: .25rem;
-    }
+  &:has(.serinity-page-content) {
+    padding-bottom: 0;
   }
 }
 
@@ -96,7 +97,7 @@
 
 .serinity-blur {
   backdrop-filter: blur(1.25rem);
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: $breakpoint-md) {
     backdrop-filter: blur(0.625rem);
   }
 }
@@ -106,7 +107,7 @@
 }
 
 .serinity-heading-bg {
-  margin-left: -0.4rem!important;
+  margin-left: -0.4rem !important;
   span {
     background: var(--wp--preset--color--rose-claire);
     color: var(--wp--preset--color--taupe-sombre);
@@ -122,5 +123,42 @@
     font-family: "eskorte-latin";
     font-weight: 700;
     font-style: italic;
+  }
+}
+
+.serinity-basic-section {
+  height: clamp(20rem, 13.3333rem + 33.3333vw, 40rem);
+  &-content {
+    position: relative;
+  }
+  &-content-txt {
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(1.25rem);
+    position: relative;
+    z-index: 1;
+    padding: $horizontal-padding-small;
+  }
+  &-content-img {
+  }
+  @media screen and (max-width: $breakpoint-md) {
+    height: unset;
+    &-content {
+      flex-direction: column;
+    }
+    &-content-txt {
+      background-color: unset;
+      backdrop-filter: unset;
+      position: unset;
+      z-index: unset;
+    }
+    &-content-img {
+      position: relative;
+      top: unset;
+      transform: unset;
+      overflow: hidden;
+      width: 100%;
+      min-height: unset;
+      height: 10rem;
+    }
   }
 }

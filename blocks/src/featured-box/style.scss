@@ -21,7 +21,7 @@
   }
 
   // Responsive adjustments
-  @media (max-width: 768px) {
+  @media screen and (max-width: 768px) {
     padding: 16px;
 
     .featured-box-title {

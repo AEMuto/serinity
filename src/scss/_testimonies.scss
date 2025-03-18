@@ -1,3 +1,5 @@
+@use "variables" as var;
+
 $max-height: 20rem;
 $arrow-width: 2.75rem; // Width of navigation arrows
 
@@ -198,13 +200,13 @@ $arrow-width: 2.75rem; // Width of navigation arrows
   }
 
   // Different screen sizes
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: var.$breakpoint-md) {
     &:not(.serinity-mobile-view) {
       // Any tablet-specific adjustments for when JS hasn't run yet
     }
   }
 
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: var.$breakpoint-sm) {
     // Smaller navigation buttons on very small screens
     .serinity-testimony-nav {
       button {
