@@ -31,24 +31,20 @@ add_action('after_setup_theme', 'serinity_setup_editor_styles');
 /**
  * Enqueue scripts and styles.
  */
-
-/**
- * Enqueue scripts and styles.
- */
 function serinity_enqueue_assets() {
   // Enqueue the main style.css file for theme metadata
   wp_enqueue_style('serenity-style', get_stylesheet_uri());
-  
+
   // Enqueue compiled CSS
   $css_file = get_template_directory() . '/assets/css/serinity.css';
   $css_version = file_exists($css_file) ? filemtime($css_file) : '1.0';
   wp_enqueue_style(
-    'serenity-main', 
+    'serenity-main',
     get_template_directory_uri() . '/assets/css/serinity.css',
     array(),
     $css_version
   );
-  
+
   // Load modern script for modern browsers
   $js_file = get_template_directory() . '/assets/js/serinity.js';
   $js_version = file_exists($js_file) ? filemtime($js_file) : '1.0';
@@ -93,14 +89,14 @@ add_action('init', 'serinity_register_blocks');
 function add_french_typographic_spaces($content) {
   // Replace spaces before specific punctuation marks with non-breaking spaces
   $content = preg_replace('/ :/', '&nbsp;:', $content);
-  
+
   // Add more punctuation marks as needed
   $content = preg_replace('/ ;/', '&nbsp;;', $content);
   $content = preg_replace('/ !/', '&nbsp;!', $content);
   $content = preg_replace('/ \?/', '&nbsp;?', $content);
   $content = preg_replace('/ »/', '&nbsp;»', $content);
   $content = preg_replace('/« /', '«&nbsp;', $content);
-  
+
   return $content;
 }
 
@@ -115,3 +111,26 @@ add_filter('widget_text', 'add_french_typographic_spaces');
 
 // Apply to titles (optional)
 add_filter('the_title', 'add_french_typographic_spaces');
+
+/**
+ * Filter the post content block to use the specified HTML tag
+ */
+function serinity_filter_post_content_tag($block_content, $block) {
+  // Check if it's the post-content block and has a tagName attribute
+  if (isset($block['blockName']) && $block['blockName'] === 'core/post-content' &&
+      isset($block['attrs']['tagName']) && $block['attrs']['tagName'] !== 'div') {
+      
+      $tag_name = esc_attr($block['attrs']['tagName']);
+      
+      // Get the class and other attributes from the original div
+      $pattern = '/<div\s+(class=".+?")(.*?)>/';
+      $replacement = '<' . $tag_name . ' $1$2>';
+      $block_content = preg_replace($pattern, $replacement, $block_content);
+      
+      // Replace the closing tag
+      $block_content = str_replace('</div>', '</' . $tag_name . '>', $block_content);
+  }
+  
+  return $block_content;
+}
+add_filter('render_block', 'serinity_filter_post_content_tag', 10, 2);

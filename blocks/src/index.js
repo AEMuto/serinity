@@ -1,2 +1,2 @@
 import "./featured-box";
-import "./featured-box-2";
+import "./block-extensions";

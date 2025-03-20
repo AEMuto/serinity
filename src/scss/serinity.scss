@@ -39,8 +39,8 @@
       padding-top: 0;
     }
   }
-  &:has(.serinity-page-content) {
-    padding-bottom: 0;
+  &.entry-content {
+    padding: 0;
   }
   &:has(.serinity-404) {
     justify-content: center;

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "serinity/block-extensions",
+  "title": "Block Extensions",
+  "category": "design",
+  "icon": "admin-customizer",
+  "description": "Extensions for WordPress core blocks",
+  "textdomain": "serinity",
+  "editorScript": "file:./index.js"
+}
