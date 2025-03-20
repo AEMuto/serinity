@@ -83,3 +83,35 @@ function serinity_register_blocks() {
   }
 }
 add_action('init', 'serinity_register_blocks');
+
+/**
+ * Adds non-breaking spaces before French punctuation marks.
+ * 
+ * @param string $content The post content.
+ * @return string The modified content.
+ */
+function add_french_typographic_spaces($content) {
+  // Replace spaces before specific punctuation marks with non-breaking spaces
+  $content = preg_replace('/ :/', '&nbsp;:', $content);
+  
+  // Add more punctuation marks as needed
+  $content = preg_replace('/ ;/', '&nbsp;;', $content);
+  $content = preg_replace('/ !/', '&nbsp;!', $content);
+  $content = preg_replace('/ \?/', '&nbsp;?', $content);
+  $content = preg_replace('/ »/', '&nbsp;»', $content);
+  $content = preg_replace('/« /', '«&nbsp;', $content);
+  
+  return $content;
+}
+
+// Apply to post content
+add_filter('the_content', 'add_french_typographic_spaces');
+
+// Apply to excerpts
+add_filter('get_the_excerpt', 'add_french_typographic_spaces');
+
+// Apply to widget text
+add_filter('widget_text', 'add_french_typographic_spaces');
+
+// Apply to titles (optional)
+add_filter('the_title', 'add_french_typographic_spaces');

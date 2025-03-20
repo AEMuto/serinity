@@ -379,6 +379,9 @@
 				}
 			}
 		},
+		"spacing": {
+			"blockGap": "var(--wp--preset--spacing--small)"
+		},
 		"typography": {
 			"fontFamily": "var(--wp--preset--font-family--body)",
 			"fontSize": "var(--wp--preset--font-size--serinity-base)",

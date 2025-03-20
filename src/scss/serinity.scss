@@ -155,7 +155,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin:0;
+  margin: 0;
   padding: 2rem;
   .serinity-basic-section &-content {
     position: relative;
@@ -197,7 +197,8 @@
     transform: rotate(90deg) translateY(-80%);
   }
   @media screen and (max-width: $breakpoint-md) {
-    height: unset;
+    min-height: unset;
+    padding: unset;
     .serinity-basic-section &-content {
       flex-direction: column;
     }
@@ -206,8 +207,11 @@
       backdrop-filter: unset;
       position: unset;
       z-index: unset;
+      margin: 0;
+      padding: 1.5rem $horizontal-padding-small;
     }
-    .serinity-basic-section &-content-img {
+    .serinity-basic-section &-content-img,
+    .serinity-basic-section &-content-img.reversed {
       position: relative;
       top: unset;
       transform: unset;
@@ -215,6 +219,15 @@
       width: 100%;
       min-height: unset;
       height: 10rem;
+      border-radius: unset;
+    }
+    .serinity-basic-section &-content-img :has(> h3),
+    .serinity-basic-section &-content-img.reversed :has(> h3) {
+      transform: unset;
+      width: 100%;
+      h3 {
+        text-align: left;
+      }
     }
   }
 }
