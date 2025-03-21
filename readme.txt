@@ -1,6 +1,6 @@
 == Serinity ==
 
-Contributors: AEMuto
+Contributors: Antoine Marseaud
 Requires at least: 6.7
 Tested up to: 6.7
 Requires PHP: 5.7
@@ -21,7 +21,7 @@ A theme for coach and healer.
 
 == Copyright ==
 
-Serinity WordPress Theme, (C) 2025 AEMuto
+Serinity WordPress Theme, (C) 2025 Antoine Marseaud
 Serinity is distributed under the terms of the GNU GPL.
 
 This program is free software: you can redistribute it and/or modify
