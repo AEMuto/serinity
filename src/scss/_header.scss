@@ -25,20 +25,32 @@ $header-breakpoint: 1110px;
 // Header wrapper styles
 .serinity-header-wrapper {
   height: var.$navbar-height;
-  backdrop-filter: blur(1.25rem); // 20px
-  background-color: rgba(250, 248, 246, 0.5);
   max-width: var.$max-content-width;
   flex: 1;
   padding: 0.8rem 1.4rem;
   border-radius: 1.2rem;
   border: solid 1px var(--wp--preset--color--nacre-claire);
-  box-shadow: 0 0.25rem 0.375rem 0.125rem rgba(0, 0, 0, 0.1);
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 1.2rem;
+    box-shadow: 0 0.25rem 0.375rem 0.125rem rgba(0, 0, 0, 0.1);
+    background-color: rgba(250, 248, 246, 0.5);
+    backdrop-filter: blur(1.25rem); // 20px
+    z-index: -1;
+  }
 
   // Media query for mid-sized screens
   @media screen and (max-width: var.$max-content-width) {
     border-radius: unset;
     border: unset;
     border-bottom: solid 1px var(--wp--preset--color--nacre-claire);
+    &::after {
+      border-radius: unset;
+    }
   }
 
   @media screen and (max-width: var.$breakpoint-sm) {
@@ -84,8 +96,19 @@ $header-breakpoint: 1110px;
     border-radius: 1.6rem;
     backdrop-filter: blur(1.6rem);
     background-color: rgba(250, 248, 246, 0.25);
+    background-color: transparent;
     overflow: hidden !important;
     border: 1px solid var(--wp--preset--color--nacre-claire);
+
+    // &::before {
+    //   content: "";
+    //   position: absolute;
+    //   inset: 0;
+    //   background-color: rgba(181, 255, 206, 0.5);
+    //   backdrop-filter: blur(1.6rem);
+    //   -webkit-backdrop-filter: blur(1.6rem);
+    //   z-index: -1;
+    // }
 
     // Submenu items
     li {

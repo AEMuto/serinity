@@ -27,6 +27,7 @@
 }
 
 .serinity-main {
+  overflow: hidden;
   min-height: calc(
     100vh - $navbar-height - $navbar-offset - $footer-height - var(--wp-admin--admin-bar--height)
   );
@@ -107,6 +108,8 @@
 
 .serinity-section {
   position: relative;
+  max-width: 100vw;
+  width: 100%;
 }
 
 .serinity-heading-bg {
