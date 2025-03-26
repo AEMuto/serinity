@@ -116,19 +116,23 @@ add_filter('the_title', 'add_french_typographic_spaces');
  * Filter the post content block to use the specified HTML tag
  */
 function serinity_filter_post_content_tag($block_content, $block) {
-  // Check if it's the post-content block and has a tagName attribute
-  if (isset($block['blockName']) && $block['blockName'] === 'core/post-content' &&
-      isset($block['attrs']['tagName']) && $block['attrs']['tagName'] !== 'div') {
-      
-      $tag_name = esc_attr($block['attrs']['tagName']);
-      
-      // Get the class and other attributes from the original div
-      $pattern = '/<div\s+(class=".+?")(.*?)>/';
-      $replacement = '<' . $tag_name . ' $1$2>';
-      $block_content = preg_replace($pattern, $replacement, $block_content);
-      
-      // Replace the closing tag
-      $block_content = str_replace('</div>', '</' . $tag_name . '>', $block_content);
+  // Only process the post-content block with a custom tagName
+  if (!isset($block['blockName']) || $block['blockName'] !== 'core/post-content' || 
+      !isset($block['attrs']['tagName']) || $block['attrs']['tagName'] === 'div') {
+      return $block_content;
+  }
+  
+  $tag_name = esc_attr($block['attrs']['tagName']);
+  
+  // Only replace the first opening div tag and the last closing div tag
+  $pattern = '/^(\s*)<div(\s+[^>]*?)>/';
+  $replacement = '$1<' . $tag_name . '$2>';
+  $block_content = preg_replace($pattern, $replacement, $block_content, 1);
+  
+  // Find last closing div tag
+  $pos = strrpos($block_content, '</div>');
+  if ($pos !== false) {
+      $block_content = substr_replace($block_content, '</' . $tag_name . '>', $pos, 6);
   }
   
   return $block_content;
