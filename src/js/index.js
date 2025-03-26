@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize testimonial carousels with options
   const testimonialsCarousels = initCarousels(".serinity-testimonies", ".serinity-testimony", {
     direction: "left", // "left" or "right"
-    speed: 0.5, // Pixels per frame
+    speed: 0.2, // Pixels per frame
     mobileTitle: "Témoignages", // Title for mobile carousel
     debug: false,
   });
