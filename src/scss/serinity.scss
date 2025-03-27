@@ -6,6 +6,7 @@
 @forward "content";
 @forward "landing-page";
 @forward "testimonies";
+@forward "pages";
 @forward "./components/card";
 
 .serinity-hidden {
@@ -27,6 +28,7 @@
 }
 
 .serinity-main {
+  margin-block-start: 0;
   overflow: hidden;
   min-height: calc(
     100vh - $navbar-height - $navbar-offset - $footer-height - var(--wp-admin--admin-bar--height)
@@ -141,16 +143,6 @@
   }
 }
 
-.serinity-main .serinity-page-content {
-  margin: 0 auto;
-  max-width: $breakpoint-md;
-  &:has(#parcours) {
-    // Pour la page À propos
-    max-width: none;
-    margin: 0;
-  }
-}
-
 .serinity-basic-section {
   min-height: 500px;
   overflow: hidden;
@@ -234,3 +226,4 @@
     }
   }
 }
+
