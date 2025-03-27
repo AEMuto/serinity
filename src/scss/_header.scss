@@ -1,12 +1,11 @@
-/*
-Header styles
-This file contains the styles for the header component.
-Since we cannot easily target <header> elements in the block editor, we will use a container and wrapper to style the header.
-In the case we create another header part, we should duplicate the original and change the container class to something like: .serinity-header-container-alt-1.
-*/
-
 @use "variables" as var;
 $header-breakpoint: 1110px;
+
+@media print {
+  .serinity-header {
+    display: none;
+  }
+}
 
 // Header container styles
 .serinity-header-container {
