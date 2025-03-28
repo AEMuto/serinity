@@ -9,6 +9,13 @@
  * @since Serenity 1.0
  */
 
+if (!defined('ABSPATH')) {
+  exit; // Exit if accessed directly
+}
+
+// Include the Systeme.io integration
+require_once get_template_directory() . '/includes/cf7-systemeio.php';
+
 /**
  * adobe fonts
  */
