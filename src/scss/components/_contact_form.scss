@@ -1,0 +1,48 @@
+@use "../variables" as var;
+
+#serinity-contact-form {
+  display: flex;
+  gap: 1.4rem;
+  flex-direction: column;
+  background-color: var(--wp--preset--color--rose-claire);
+  padding: 1.8rem 1.4rem;
+  border-radius: 1rem;
+  span > span {
+    margin-top: .8rem;
+  }
+  label {
+    font-weight: 600;
+    display: block;
+    text-transform: capitalize;
+  }
+  br {
+    margin: 0.4rem 0;
+  }
+  input, textarea {
+    min-height: 44px;
+    border: unset;
+    border-radius: 1rem;
+    padding: .8rem 1rem;
+    font-weight: 400;
+  }
+  input[type="submit"] {
+    margin-top: 1rem;
+    color: var(--wp--preset--color--nacre-claire);
+    background-color: var(--wp--preset--color--rose-sombre);
+    font-size: 1.4rem;
+    font-weight: 600;
+    padding: 1.2rem 2rem;
+    border-radius: 9999px;
+    box-shadow: var(--wp--preset--shadow--natural);
+    transition: all 0.3s ease;
+  }
+  input[type="submit"]:hover {
+    background-color: var(--wp--preset--color--taupe);
+    transform: translateY(-0.25rem);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+  input[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: var(--wp--preset--shadow--natural);
+  }
+}
