@@ -26,6 +26,9 @@ A theme for coach and healer.
 * Add a new template for the contact page
 * Update the template for the landing page
 
+= 1.0.2 =
+* Hotfix: Fix release.sh script and improved dependencies detection
+
 == Copyright ==
 
 Serinity WordPress Theme, (C) 2025 Antoine Marseaud
