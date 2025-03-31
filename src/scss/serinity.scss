@@ -1,13 +1,13 @@
 @use "variables" as *;
 @use "mixins" as *;
 @forward "reset";
-@forward "header";
-@forward "footer";
-@forward "content";
-@forward "landing-page";
-@forward "testimonies";
-@forward "pages";
+@forward "./components/header";
+@forward "./components/footer";
+@forward "./components/testimonies";
 @forward "./components/card";
+@forward "./components/contact_form";
+@forward "./pages/landing-page";
+@forward "./pages/aurea";
 
 .serinity-hidden {
   display: none;

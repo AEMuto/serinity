@@ -1,4 +1,4 @@
-@use "variables" as var;
+@use "../variables" as var;
 
 #hero {
   $hero-text-img-height: clamp(14.25rem, 8.8036rem + 27.2321vw, 21.875rem);

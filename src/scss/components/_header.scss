@@ -1,4 +1,5 @@
-@use "variables" as var;
+@use "../variables" as var;
+
 $header-breakpoint: 1110px;
 
 @media print {
