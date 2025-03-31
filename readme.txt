@@ -18,6 +18,13 @@ A theme for coach and healer.
 = 1.0.0 =
 * Initial release
 
+= 1.0.1 =
+
+* Add multiple templates
+* Integration between systeme.io and Contact Form 7
+* Add a new template for the blog
+* Add a new template for the contact page
+* Update the template for the landing page
 
 == Copyright ==
 
