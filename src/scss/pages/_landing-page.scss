@@ -289,8 +289,6 @@ $opacity-min: 0.1;
       rgba(0, 0, 0, 0) 50%,
       var(--wp--preset--color--rose) 90%
     );
-    mix-blend-mode: lighten;
-    isolation: isolate;
   }
 
   @media screen and (max-width: var.$breakpoint-md) {
