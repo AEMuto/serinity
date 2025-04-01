@@ -488,7 +488,7 @@ export class SerinityCarousel {
     }
     
     this.scrollPosition = targetPosition;
-    this.scrollWrapper.style.transform = `translateX(-${this.scrollPosition}px)`;
+    this.scrollWrapper.style.transform = `translate3d(${-Math.round(this.scrollPosition)}px, 0, 0)`;
   }
 
   /**
@@ -525,7 +525,7 @@ export class SerinityCarousel {
     this.scrollPosition = this.singleSetWidth;
 
     // Apply initial position
-    this.scrollWrapper.style.transform = `translateX(-${this.scrollPosition}px)`;
+    this.scrollWrapper.style.transform = `translate3d(${-Math.round(this.scrollPosition)}px, 0, 0)`;
 
     // Get center point of container for opacity calculations
     this.containerCenter = this.container.offsetWidth / 2;
