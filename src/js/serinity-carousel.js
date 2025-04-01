@@ -642,7 +642,7 @@ export class SerinityCarousel {
         }
 
         // Apply the transform
-        this.scrollWrapper.style.transform = `translateX(-${this.scrollPosition}px)`;
+        this.scrollWrapper.style.transform = `translate3d(${-Math.round(this.scrollPosition)}px, 0, 0)`;
       }
 
       // Always update card appearances
