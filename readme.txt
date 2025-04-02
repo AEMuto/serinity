@@ -29,6 +29,9 @@ A theme for coach and healer.
 = 1.0.2 =
 * Hotfix: Fix release.sh script and improved dependencies detection
 
+= 1.0.3 =
+* Refactoring minor CSS and JS
+
 == Copyright ==
 
 Serinity WordPress Theme, (C) 2025 Antoine Marseaud
