@@ -100,16 +100,6 @@ $header-breakpoint: 1110px;
     overflow: hidden !important;
     border: 1px solid var(--wp--preset--color--nacre-claire);
 
-    // &::before {
-    //   content: "";
-    //   position: absolute;
-    //   inset: 0;
-    //   background-color: rgba(181, 255, 206, 0.5);
-    //   backdrop-filter: blur(1.6rem);
-    //   -webkit-backdrop-filter: blur(1.6rem);
-    //   z-index: -1;
-    // }
-
     // Submenu items
     li {
       width: 100%;
